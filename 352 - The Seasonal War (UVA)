@@ -18,6 +18,7 @@ void dfs(int i,int j,int size,vector<string>& image,vector< vector<bool> >& visi
 		}
 	}
 }
+
 int main()
 {
 	int n,count1,count2=1;
