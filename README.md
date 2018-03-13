@@ -1,2 +1,2 @@
 # Competitive Programming
-Solving Problems on different online judges such as UVa online judge , Codeforces and SPOJ .
+Solving some Problems of Competitve Programming 3 book by Steven Halim and Felix Halim
