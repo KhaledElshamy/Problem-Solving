@@ -16,6 +16,7 @@ struct node *newNode(int item)
 	return temp;
 }
 
+// MARK -- find path for from root to the key 
 
 bool findpath(struct node* node , vector<struct node* > &path , int key){
 
@@ -30,6 +31,8 @@ bool findpath(struct node* node , vector<struct node* > &path , int key){
 	return false;
 }
 
+// MARK -- find the largest node on the path that connects x & y 
+
 int findLCA(struct node *node , int x ,int y,int maximum){
 	int i,j;
 
@@ -37,28 +40,41 @@ int findLCA(struct node *node , int x ,int y,int maximum){
 
 	findpath(node,path1,x);
 	findpath(node,path2,y);
-
-	for(i=0 ; i<path1.size()&&i<path2.size();i++)
-		if(path1[i]->key!=path2[i]->key){
-			for(j=i;j<path1.size()&&j<path2.size();j++) maximum =max(maximum,max(path1[j]->key,path2[j]->key));
-			break;
-		}
-
-	if(j<path1.size()){
-		while(j<path1.size()){
-			maximum = max(maximum,path1[i]->key);
-			j++;
-		}
+	
+	int ancestorNode , index ; 
+	int minimumSize = min(path1.size() , path2.size());
+	
+	for(i= minimumSize - 1 ; i>=0 ; i--){
+	    if(path1[i]->key == path2[i]->key){
+	        ancestorNode = path1[i]->key;
+	        index = i ;
+	        break;
+	    }
 	}
-	if(j<path2.size()){
-		while(j<path2.size()){
-			maximum = max(maximum,path2[i]->key);
-			j++;
-		}
+	
+	for(i= index ; i< minimumSize ; i++){
+	    maximum = max(maximum , max(path1[i]->key , path2[i]->key));
 	}
-	maximum = max(maximum,path1[i-1]->key);
-	return maximum;
+	
+	if(i<path1.size()){
+	     while(i<path1.size()){
+	        maximum = max(maximum , path1[i]->key);
+	        i++;
+	    }
+	}
+	
+	if(i<path2.size()){
+	    while(i<path2.size()){
+	        maximum = max(maximum , path2[i]->key);
+	        i++;
+	    }
+	}
+	
+	return maximum ; 
 }
+
+
+// MARK -- insert nodes in tree 
 
 struct node* insert(struct node* node, int key)
 {
