@@ -1,0 +1,62 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    
+    vector<TreeNode*> v;
+    
+    vector<vector<TreeNode*> > paths;
+    int count = 0 ;
+    int Depth;
+    
+    // MARK: - get the maximum depth of the tree
+    int depth(TreeNode* root){
+        if(root == NULL) return 0;
+        
+        int left = depth(root->left);
+        int right = depth(root->right);
+        
+        return 1 + max(left,right);
+    }
+    
+    // MARK: - get all nodes that is located in this depth 
+    void findPaths(TreeNode* root){
+        if(root == NULL)return;
+        
+        count++;
+        v.push_back(root);
+        if(count == Depth)paths.push_back(v);
+        findPaths(root->left);
+        findPaths(root->right);
+        
+        count--;
+        v.pop_back();
+        return ;
+    }
+    
+    TreeNode* lcaDeepestLeaves(TreeNode* root) {
+       
+        Depth = depth(root);
+        findPaths(root);
+        
+        map<int,int> m;
+        TreeNode* saveNode;
+        
+        for(int i=0;i<paths.size();i++){
+            for(int j=0;j<(int)paths[i].size();j++){
+                m[paths[i][j]->val]++;
+                if(m[paths[i][j]->val] == paths.size())saveNode =  paths[i][j];
+            }
+        }
+        return saveNode;
+    }
+};
