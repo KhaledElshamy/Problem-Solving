@@ -1,45 +1,52 @@
-#include <bits/stdc++.h>
+#include <algorithm>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <cstring>
+
 using namespace std;
 
+typedef long long ll;
+typedef long double ld;
+typedef vector<int> vi;
+typedef vector<double> vd;
 typedef pair<int,int> ii;
-typedef vector<ii> vi;
-typedef vector<vi> vii;
-typedef vector< vector<int> > v;
 
-void dfs(int i,int j,int size,vector<string>& image,vector< vector<bool> >& visited){
-	for(int i1=i-1;i1<i+2;i1++){
-		for(int j1=j-1;j1<j+2;j1++)
-		{
-			if(i1>=0&&j1>=0&&i1<size&&j1<size&&!visited[i1][j1]&&image[i1][j1]=='1')
-			{
-				visited[i1][j1]=true;
-				dfs(i1,j1,size,image,visited);
-			}
-		}
-	}
+int dr[] = {1,0,-1,0,1,-1,1,-1};
+int dc[] = {0,1,0,-1,1,-1,-1,1};
+
+int floodFill(int r, int c, int R, int C, vector<vector<char> >& grid) {
+    if(r<0 || c < 0 || r>=R || c>=C) return 0 ;
+    if(grid[r][c] == '0') return 0;
+    grid[r][c] = '0';
+    int ans = 1; 
+    for(int i=0;i<8;i++)ans += floodFill(r+dr[i],c+dc[i],R,C,grid);
+    return ans ; 
 }
 
-int main()
-{
-	int n,count1,count2=1;
+int main(){
+
+    int n, numberOfImage = 1, count;
 	while(cin>>n && n){
-		vector<string>image(n);
-		count1=0;
-		image.clear();
-		for(int i=0;i<n;i++)cin>>image[i];
-		vector< vector<bool> >visited(n,vector<bool>(n,false));
-		for(int i=0;i<n;i++){
-			for(int j=0;j<n;j++){
-				if(image[i][j]=='1'&&!visited[i][j]){
-					count1++;
-					visited[i][j]=true;
-					dfs(i,j,n,image,visited);
-				}
-			}
-		}
-		 cout << "Image number " << count2 << " contains " << count1 << " war eagles.\n";
-		 count2++;
-	}
-	return 0;
-}
+        count = 0 ;
+        vector<vector<char> > image(n,vector<char>(n));
+        // image.erase(image.begin(),image.end());
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++)cin>>image[i][j];
+        }
 
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(image[i][j] == '1'){
+                    floodFill(i,j,n,n,image);
+                    count++;
+                }
+            }
+        }
+
+        cout<<"Image number "<< numberOfImage << " contains " << count << " war eagles."<<endl; 
+        numberOfImage++;
+    }
+    return 0;
+}
